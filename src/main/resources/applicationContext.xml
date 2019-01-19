@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:config.properties"/>
+
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan
+		base-package="videoClub.JpaSpring.dao"></context:component-scan>
+
+	<!-- Créer une instance d'une data source pour gérer la connexion à la BDD -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName"
+			value="${db.driverClassName}"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="url"
+			value="${db.url}"></property>
+		<property name="password" value="${db.password}"></property>
+		<property name="initialSize" value="${pool.initialSize}"></property>
+		<property name="maxTotal" value="${pool.maxTotal}"></property>
+	</bean>
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="packagesToScan"
+			value="videoClub.JpaSpring.model"></property>
+		<property name="jpaVendorAdapter">
+			<bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="databasePlatform"
+					value="org.hibernate.dialect.PostgreSQL95Dialect"></property>
+				<property name="showSql" value="true"></property>
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props> <!-- Cléation d'une map avec les clés suivante associés à jpaProperties -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.format_sql"></prop> <!-- Pour avoir les requêtes bien formatées -->
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="entityManagerFactory"></property>
+	</bean>
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+	<!-- Pour améliorer les messages d'erreurs -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"></bean>
+</beans>
