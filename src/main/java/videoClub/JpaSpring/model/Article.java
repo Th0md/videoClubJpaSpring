@@ -41,6 +41,22 @@ public abstract class Article {
 		this.nbDisques = nbDisques;
 	}
 
+	public Integer getNoAdherent() {
+		return noAdherent;
+	}
+
+	public void setNoAdherent(Integer noAdherent) {
+		this.noAdherent = noAdherent;
+	}
+
+	public Integer getNoFilm() {
+		return noFilm;
+	}
+
+	public void setNoFilm(Integer noFilm) {
+		this.noFilm = noFilm;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

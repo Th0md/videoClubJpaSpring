@@ -30,7 +30,6 @@ public class DaoFilmJpaImpl implements DaoFilm {
 	
 	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.DEFAULT, readOnly=false)
 	public void insert(Film obj) {
-		System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
 			em.persist(obj);
 	}
 
